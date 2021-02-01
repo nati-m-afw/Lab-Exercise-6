@@ -19,8 +19,6 @@ filter.addEventListener('keyup', filterTasks);
 taskList.addEventListener('click', removeTask);
 // Event Listener for reload 
 reloadIcon.addEventListener('click', reloadPage);
-// Event Listener for page load
-document.addEventListener('DOMContentLoaded', loadTasksfromDB);
 
 
 
@@ -54,7 +52,7 @@ function addNewTask(e) {
     li.appendChild(link);
     // Append to UL 
     taskList.appendChild(li);
-    addToDatabase(taskInput.value);
+
 
 
 
@@ -74,7 +72,6 @@ function clearAllTasks() {
     while (taskList.firstChild) {
         taskList.removeChild(taskList.firstChild);
     }
-    clearAllFromDatabase();
 
 }
 
@@ -102,8 +99,8 @@ function filterTasks(e) {
 function removeTask(e) {
     if (e.target.parentElement.classList.contains('delete-item')) {
         if (confirm('Are You Sure about that ?')) {
-            removefromDB(e.target.parentElement.parentElement);
             e.target.parentElement.parentElement.remove();
+
         }
 
     }
@@ -114,21 +111,4 @@ function removeTask(e) {
 function reloadPage() {
     //using the reload fun on location object 
     location.reload();
-}
-
-function loadTasksfromDB(){
-    let listofTasks = loadfromDB();
-
-    if (listofTasks.length != 0) {
-        listofTasks.forEach(function(eachTask) {
-            const li = document.createElement('li'); // Create an li element when the user adds a task
-            li.className = 'collection-item'; // Adding a class
-            li.appendChild(document.createTextNode(eachTask)); // Create text node and append it
-            const link = document.createElement('a'); // Create new element for the link
-            link.className = 'delete-item secondary-content'; // Add class and the x marker for a
-            link.innerHTML = '<i class="fa fa-remove"> </i>';
-            li.appendChild(link); // Append link to li
-            taskList.appendChild(li); // Append to UL
-        });
-    }   
 }
