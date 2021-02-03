@@ -65,6 +65,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+
+        var transaction = DB.transaction(['tasks'], 'readwrite');
+        var objectStore = transaction.objectStore('tasks', 'readwrite');
+        var request = objectStore.get(id);
+
+        request.onsuccess = function(e){
+            const task = e.target.result;
+            console.log(task.taskname);
+            task.taskname = taskInput.value;
+            const updateRequest = objectStore.put(task);
+            
+            updateRequest.onsuccess = () => {
+                console.log("Successfully updated");
+            }
+
+            updateRequest.onerror = () => {
+                console.log("Error happened on updating");
+            }
+
+        }
+        // transaction.oncomplete =
+        transaction.onerror = function(){
+            console.log("Error happend on fetching");
+        }
         /* 
         Instruction set to handle Update
 
