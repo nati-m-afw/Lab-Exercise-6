@@ -57,11 +57,19 @@
                 </div>
                 <div class="card-action">
                     <h5 id="task-title">List of Tasks</h5>
-                    <div class="input-field col s12">
+                    <div class="input-field col s10">
                         <input type="search" name="filter" id="filter">
                         <label for="filter">Search</label>
                     </div>
-                    <ul class="collection">
+                    <div class="order right-align col s2">
+                        <label>Order</label>
+                        <select class="order-options browser-default">
+                        <option value="1" selected>Ascending</option>
+                        <option value="2">Descending</option>
+                        </select>
+                    </div>
+                    
+                    <ul class="collection col s12">
                         <!-- Here is the task list goes  -->
                     </ul>
                     <a href="#" class="clear-tasks btn red">Clear All Task</a>

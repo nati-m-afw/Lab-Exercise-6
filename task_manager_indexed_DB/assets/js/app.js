@@ -6,6 +6,11 @@ const taskList = document.querySelector('.collection'); //The UL
 const clearBtn = document.querySelector('.clear-tasks'); //the all task clear button
 
 const reloadIcon = document.querySelector('.fa'); //the reload button at the top navigation 
+const orderBtn = document.querySelector('.order-options');
+
+
+// date
+const date = new Date();
 
 //// index db code
 
@@ -38,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // createindex: 1) field name 2) keypath 3) options
         objectStore.createIndex('taskname', 'taskname', { unique: false });
+        objectStore.createIndex('time', 'time', { unique: true });
         console.log('Database ready and fields created!');
     }
 
@@ -52,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let newTask = {
-            taskname : taskInput.value
+            taskname : taskInput.value,
+            time : date.getTime()
         };
 
         let transaction = DB.transaction(['tasks'], 'readwrite');
@@ -99,6 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
                 // Append link to li
                 li.appendChild(link);
+                // create new element for date
+                const date = document.createElement('div');
+                date.className = 'secondary-content';
+                date.style.paddingRight = '2rem';
+                date.appendChild(document.createTextNode( new Date(cursor.value.time).toLocaleString('en-US') ));
+                li.appendChild(date);
                 // Append to UL 
                 taskList.appendChild(li);
                 cursor.continue();
@@ -135,4 +148,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
            
     }
+
+    orderBtn.addEventListener("change", changeSortOrder);
+    function changeSortOrder(e){
+        
+    }
+
+    function sort(type){
+        if(type == 2){
+            // sort in descending order
+            for(let i = 0; i < taskList.childElementCount; i++){
+                for (let j = taskList.childElementCount - 1; j > i; j--) {
+                    if(taskList.children[j].getAttribute("data-date") > taskList.children[j - 1].getAttribute("data-date")){
+                        tmp = taskList.children[j].outerHTML;
+                        taskList.children[j].outerHTML = taskList.children[j - 1].outerHTML;
+                        taskList.children[j - 1].outerHTML = tmp;
+                    }
+                }
+            }
+        }
+    
+    
+        else if(type == 1){
+        //sort in ascending order
+            for(let i = 0; i < taskList.childElementCount; i++){
+                for (let j = taskList.childElementCount - 1; j > i; j--) {
+                    if(taskList.children[j].getAttribute("data-date") < taskList.children[j - 1].getAttribute("data-date")){
+                        tmp = taskList.children[j].outerHTML;
+                        taskList.children[j].outerHTML = taskList.children[j - 1].outerHTML;
+                        taskList.children[j - 1].outerHTML = tmp;
+                    }
+                }
+            }
+        }
+    
+        return;
+    }
+
 }) 
